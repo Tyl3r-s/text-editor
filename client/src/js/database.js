@@ -1,5 +1,9 @@
 import { openDB } from 'idb';
 
+// var version = 1;
+//DBOpenRequest as per docs
+// const DBOpenRequest = window.indexedDB.open("toDoList", 4);
+
 const initdb = async () =>
   openDB('jate', 1, {
     upgrade(db) {
@@ -8,6 +12,8 @@ const initdb = async () =>
         return;
       }
       db.createObjectStore('jate', { keyPath: 'id', autoIncrement: true });
+      //ADDED : Testing
+      // db.createObjectStore('jate');
       console.log('jate database created');
     },
   });
@@ -27,19 +33,24 @@ export const putDb = async (content) => {
   const store = tx.objectStore('jate');
 
   // Use the .add() method on the store and pass in the content.
-  const request = store.add({ content});
+  const request = store.put({ content });
 
   // Get confirmation of the request.
   const result = await request;
   console.log('🚀 - data saved to the database', result);
 
+  // db.close(); //this is where the only opened db connection is closed
+
   // => console.error('putDb not implemented');
-  }
+}
 
 // TODO: Add logic for a method that gets all the content from the database
 // export const getDb = async () => console.error('getDb not implemented');
 // Added: Add logic for a method that gets all the content from the database
 export const getDb = async () => {
+
+  // initdb();
+  
   console.log('GET from the database');
 
   //create a connection to the IndexedDB database and the version we want to use
@@ -60,5 +71,5 @@ export const getDb = async () => {
   return result;
 
   console.error('getDb not implemented');
-  }
+}
 initdb();
